@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "to do app"
+version = "0.1.0"
+description = "To Do application to manage personal events"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^4.1.1"
+djangorestframework = "^3.13.1"
+Pillow = "^9.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
