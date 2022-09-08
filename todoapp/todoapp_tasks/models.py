@@ -1,4 +1,7 @@
+import datetime
+
 from django.db import models
+from django.utils.timezone import now
 
 
 # Create your models here.
@@ -16,6 +19,10 @@ class ToDoTask(models.Model):
 
     priority = models.CharField('Priority', max_length=50, choices=Priority.choices, blank=False,
                                 default=Priority.NORMAL)
+    created_date = models.DateTimeField(
+        auto_now_add=True)  # auto now add only takes the time on the creation of the object
+    update_date = models.DateTimeField(
+        auto_now=True)  # auto now means that each time a save() method is called in ToDOTask model, this is updated
 
     def __str__(self):
         if self.is_completed is False:
