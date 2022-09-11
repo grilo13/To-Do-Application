@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'todoapp.todoapp_tasks',
     'todoapp.todoapp_users',
 
+    'corsheaders',
+
     # Third Pary apps
     'rest_framework',
 
@@ -55,7 +57,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# change to https://app.example.com in production settings
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
+
+# CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 ROOT_URLCONF = 'todoapp.urls'
 
