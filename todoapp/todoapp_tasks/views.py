@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from rest_framework.views import APIView
 
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -18,16 +19,14 @@ from .serializers import TaskSerializer
 # Create your views here.
 class ListTasksView(GenericAPIView):
     serializer_class = TaskSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     queryset = ToDoTask.objects.all()
 
     def get(self, request):
-        # user = request.user
-        user = User.objects.get(id=2)
+        user = request.user
         tasks = user.tasks.all()
-        serializer = self.serializer_class(tasks, many=True)
-
-        return Response(serializer.data, status=HTTP_200_OK)
+        context = {'tasks': tasks, 'count': tasks.count()}
+        return render(request, 'task_list.html', context)
 
     def post(self, request):
         data = request.data
@@ -44,15 +43,14 @@ class ListTasksView(GenericAPIView):
 
 class GetTaskView(GenericAPIView):
     serializer_class = TaskSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     queryset = ToDoTask.objects.all()
 
     def get(self, request, id):
-        user = User.objects.get(id=2)
+        user = request.user
         task = user.tasks.filter(id=id).first()
-        serializer = self.serializer_class(task)
-
-        return Response(serializer.data, status=HTTP_200_OK)
+        context = {'task': task}
+        return render(request, 'task_object.html', context)
 
     def put(self, request, id):
         print(f'put')
@@ -65,10 +63,30 @@ class GetTaskView(GenericAPIView):
 
         return Response(status=HTTP_200_OK)
 
-    def delete(self, request, id):
-        data = request.data
-        print(data)
-        user = User.objects.get(id=2)
+
+class DeleteTaskView(GenericAPIView):
+    serializer_class = TaskSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = ToDoTask.objects.all()
+
+    def get(self, request, id):
+        user = request.user
         task = user.tasks.filter(id=id).first()
         task.delete()
-        return Response(status=HTTP_200_OK)
+        return redirect('list_of_tasks')
+
+
+class TaskReorderView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        option = data.get('option')
+        user = request.user
+
+        if option == 'completed':
+            tasks = user.tasks.filter(is_completed=True).order_by('created_date')
+        else:
+            tasks = user.tasks.all()
+
+        return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})

@@ -86,3 +86,6 @@ class LoginUser(GenericAPIView):
         login(request, user)
 
         return Response({'success': 'User logged in successfully.'}, status=HTTP_200_OK)
+
+def index(request):
+    return render(request, 'user_example/index.html')
