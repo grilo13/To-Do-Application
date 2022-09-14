@@ -23,6 +23,10 @@ class RegisterUser(GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterUserSerializer
 
+    def get(self, request):
+
+        return render(request, 'authentication/register.html')
+
     def post(self, request, *args, **kwargs):
         data = request.data
         email = data.get('email')
@@ -68,25 +72,31 @@ class LoginUser(GenericAPIView):
     serializer_class = LoginUserSerializer
 
     def get(self, request):
+
+        if request.user.is_authenticated:
+            return redirect('list_of_tasks')
+
         return render(request, 'authentication/new_login.html')
 
     def post(self, request, *args, **kwargs):
+
+        if request.user.is_authenticated:
+            return redirect('list_of_tasks')
+
         data = request.data
         email = data.get('email')
         password = data.get('password')
 
-        print(data)
-
         user = User.objects.filter(email=email)
 
         if not user.exists():
-            return render(request, 'authentication/login.html', {'error': 'Email don\'t exist.'})
+            return render(request, 'authentication/new_login.html', {'error': 'Email don\'t exist.'})
             # return Response({'error', 'Email don\'t exist.'}, status=HTTP_400_BAD_REQUEST)
 
         user = user[0]
 
         if not user.check_password(password):
-            return render(request, 'authentication/login.html', {'error': 'Password isn\'t correct'})
+            return render(request, 'authentication/new_login.html', {'error': 'Password isn\'t correct'})
             # return Response({'error': 'Password isn\'t correct.'}, status=HTTP_400_BAD_REQUEST)
 
         user = authenticate(username=email, password=password)
