@@ -1,5 +1,14 @@
+{% load static %}
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+  <style>
+      .header-bar {
+          text-align: center;
+          margin: auto;
+      }
+  </style>
+</head>
 <body>
 <div class="header-bar">
     <div>
@@ -13,6 +22,7 @@
     <option value="priority">Priority</option>
     <option value="completed">Completed</option>
 </select>
+
 <script>
     function val() {
         order_by = document.getElementById("task-priority").value;
