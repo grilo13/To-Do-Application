@@ -27,3 +27,4 @@ urlpatterns = [
 # tells django to serve static files, so when we visit the image path, it will be shown in the browser
 # then we can use that url whenever we want to display that image
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

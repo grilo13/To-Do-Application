@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Index</title>
+</head>
+<body>
+    <h1>This is the index page!</h1>
+    {% if user.is_authenticated %}
+    <h2>You name is: {{ user.email }} with role {{ user.role }}</h2>
+    {% block content %}
+       <img src="{{user.photo.url}}" alt="User photo" width="100" height="100">
+    {% endblock %}
+    {% block select_company %}
+       <form action="{% url 'list_of_tasks' %}">
+            <input type="submit" value="See your Tasks" />
+        </form>
+    {% endblock %}
+    {% block content3 %}
+       <form method="post" action="{% url 'logout_user' %}">
+            {% csrf_token %}
+
+            <input type="submit" value="Logout">
+        </form>
+    {% endblock %}
+    {% else %}
+    <h2>You are not logged in.</h2>
+    {% block content4 %}
+       <form action="{% url 'login_user' %}">
+            <input type="submit" value="Go to Login Page" />
+        </form>
+    {% endblock %}
+    {% endif %}
+</body>
+</html>

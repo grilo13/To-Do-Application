@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.generics import GenericAPIView
 
 # Responses
@@ -22,6 +22,10 @@ from rest_framework.permissions import AllowAny
 class RegisterUser(GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterUserSerializer
+
+    def get(self, request):
+
+        return render(request, 'authentication/register.html')
 
     def post(self, request, *args, **kwargs):
         data = request.data
@@ -60,14 +64,25 @@ class LogoutUser(GenericAPIView):
 
     def get(self, request):
         logout(request)
-
-        return Response(f'User logged out.', status=HTTP_200_OK)
+        return redirect('login_user')
+        # return Response(f'User logged out.', status=HTTP_200_OK)
 
 
 class LoginUser(GenericAPIView):
     serializer_class = LoginUserSerializer
 
+    def get(self, request):
+
+        if request.user.is_authenticated:
+            return redirect('list_of_tasks')
+
+        return render(request, 'authentication/new_login.html')
+
     def post(self, request, *args, **kwargs):
+
+        if request.user.is_authenticated:
+            return redirect('list_of_tasks')
+
         data = request.data
         email = data.get('email')
         password = data.get('password')
@@ -75,14 +90,21 @@ class LoginUser(GenericAPIView):
         user = User.objects.filter(email=email)
 
         if not user.exists():
-            return Response({'error', 'Email don\'t exist.'}, status=HTTP_400_BAD_REQUEST)
+            return render(request, 'authentication/new_login.html', {'error': 'Email don\'t exist.'})
+            # return Response({'error', 'Email don\'t exist.'}, status=HTTP_400_BAD_REQUEST)
 
         user = user[0]
 
         if not user.check_password(password):
-            return Response({'error': 'Password isn\'t correct.'}, status=HTTP_400_BAD_REQUEST)
+            return render(request, 'authentication/new_login.html', {'error': 'Password isn\'t correct'})
+            # return Response({'error': 'Password isn\'t correct.'}, status=HTTP_400_BAD_REQUEST)
 
         user = authenticate(username=email, password=password)
         login(request, user)
 
-        return Response({'success': 'User logged in successfully.'}, status=HTTP_200_OK)
+        return redirect('list_of_tasks')
+        # return Response({'success': 'User logged in successfully.'}, status=HTTP_200_OK)
+
+
+def index(request):
+    return render(request, 'user_example/index.html')
