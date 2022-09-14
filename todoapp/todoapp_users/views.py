@@ -68,7 +68,7 @@ class LoginUser(GenericAPIView):
     serializer_class = LoginUserSerializer
 
     def get(self, request):
-        return render(request, 'authentication/login.html')
+        return render(request, 'authentication/new_login.html')
 
     def post(self, request, *args, **kwargs):
         data = request.data
