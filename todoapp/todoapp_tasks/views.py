@@ -108,6 +108,18 @@ class TaskReorderView(APIView):
                 pass
             else:
                 return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})
+        elif option == 'created_date':
+            tasks = user.tasks.order_by('created_date')
+            if tasks.count() == 0:
+                pass
+            else:
+                return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})
+        elif option == 'updated_date':
+            tasks = user.tasks.order_by('-update_date')
+            if tasks.count() == 0:
+                pass
+            else:
+                return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})
 
         tasks = user.tasks.all()
         return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})
