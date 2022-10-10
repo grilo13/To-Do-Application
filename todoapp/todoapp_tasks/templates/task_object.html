@@ -10,9 +10,15 @@
     <div class="task-description">
         <h2 class="task-title">{{ task.title }}</h2>
         <h2 class="task-id">ID: {{ task.id }}</h2>
-        <div class="description">
-            <h2>{{ task.description }}</h2>
-        </div>
+        <form id="updateTask" method="post" action="{% url 'update_task' task.id %}">
+            {% csrf_token %}
+            <textarea class="description" style="resize: none" name="description">{{ task.description }}</textarea><br><br>
+            <button type="submit" class="update_description" value="description">Update Description</button>
+        </form>
+        <{% if message %}
+            <h1 class="successful_description_update">Description updated successfully</h1>
+        {% else %}
+        {% endif %}
         <br>
         <br>
         <a href="{% url 'delete_task_by_id' task.id %}"

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from rest_framework.views import APIView
 
 from rest_framework.generics import GenericAPIView
@@ -49,8 +49,6 @@ class CreateTask(GenericAPIView):
         else:
             return Response(serializer.errors)
 
-        # context = {'task': serializer.data}
-        # return render(request, 'create_task.html', context)
         return redirect('list_of_tasks')
 
 
@@ -65,16 +63,25 @@ class GetTaskView(GenericAPIView):
         context = {'task': task}
         return render(request, 'task_object.html', context)
 
-    def put(self, request, id):
-        print(f'put')
+
+class UpdateTaskView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, id):
+        user = request.user
         data = request.data
         task_description = data.get('description')
-        user = User.objects.get(id=2)
-        task = user.tasks.filter(id=id).first()
-        task.description = task_description
-        task.save(update_fields=['description'])
 
-        return Response(status=HTTP_200_OK)
+        try:
+            task = ToDoTask.objects.get(user=user, id=id)
+            task.description = task_description
+            task.save(update_fields=['description'])
+        except Exception as e:
+            # return render(request, 'task_object.html', {'error': 'Something went wrong.'})
+            return redirect('list_of_tasks')
+
+        context = {'message': 'Description update successfully.'}
+        return redirect('list_of_tasks')
 
 
 class DeleteTaskView(GenericAPIView):
