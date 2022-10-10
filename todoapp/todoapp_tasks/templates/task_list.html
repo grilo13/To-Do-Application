@@ -36,6 +36,10 @@
     <input type="submit" value="Submit" onclick="val()">
 </form>
 
+<a href="{% url 'create_task' %}"
+                       class="btn btn-danger btn-sm">Create task</a>
+
+
 <div class="app-table">
     <table class="table table-stripped table-hover">
         <thead>
@@ -57,6 +61,15 @@
                 <td>{{ task.description }}</td>
                 <td>{{ task.priority }}</td>
                 <td> {{ task.is_completed }}</td>
+                {% if task.is_completed %}
+                {% else %}
+                    <td>
+                        <form id="completeTask" method="post" action="{% url 'complete_task' task.id %}">
+                            {% csrf_token %}
+                            <input type="submit" value="Click to complete"  >
+                        </form>
+                     </td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>
