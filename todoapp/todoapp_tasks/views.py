@@ -26,7 +26,7 @@ class ListTasksView(GenericAPIView):
 
     def get(self, request):
         user = request.user
-        tasks = user.tasks.all()
+        tasks = ToDoTask.objects.filter(user=user)
         context = {'tasks': tasks, 'count': tasks.count()}
         return render(request, 'task_list.html', context)
 
@@ -36,20 +36,21 @@ class CreateTask(GenericAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = ToDoTask.objects.all()
 
+    def get(self, request):
+        return render(request, 'create_task.html')
+
     def post(self, request):
         user = request.user
         data = request.data
 
         serializer = self.serializer_class(data=data)
-
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=user)
         else:
             return Response(serializer.errors)
 
-        user.tasks.add(serializer.data.get('id'))
-        user.save()
-
+        # context = {'task': serializer.data}
+        # return render(request, 'create_task.html', context)
         return redirect('list_of_tasks')
 
 
@@ -60,7 +61,7 @@ class GetTaskView(GenericAPIView):
 
     def get(self, request, id):
         user = request.user
-        task = user.tasks.filter(id=id).first()
+        task = ToDoTask.objects.get(user=user, id=id)
         context = {'task': task}
         return render(request, 'task_object.html', context)
 
@@ -83,7 +84,7 @@ class DeleteTaskView(GenericAPIView):
 
     def get(self, request, id):
         user = request.user
-        task = user.tasks.filter(id=id).first()
+        task = ToDoTask.objects.get(user=user, id=id)
         task.delete()
         return redirect('list_of_tasks')
 
@@ -97,31 +98,31 @@ class TaskReorderView(APIView):
         user = request.user
 
         if option == 'completed':
-            tasks = user.tasks.filter(is_completed=True).order_by('created_date')
+            tasks = ToDoTask.objects.filter(user=user, is_completed=True).order_by('created_date')
             if tasks.count() == 0:
                 pass
             else:
                 return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})
         elif option == 'priority':
-            tasks = user.tasks.order_by('priority')
+            tasks = ToDoTask.objects.filter(user=user).order_by('priority')
             if tasks.count() == 0:
                 pass
             else:
                 return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})
         elif option == 'created_date':
-            tasks = user.tasks.order_by('created_date')
+            tasks = ToDoTask.objects.filter(user=user).order_by('created_date')
             if tasks.count() == 0:
                 pass
             else:
                 return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})
         elif option == 'updated_date':
-            tasks = user.tasks.order_by('-update_date')
+            tasks = ToDoTask.objects.filter(user=user).order_by('update_date')
             if tasks.count() == 0:
                 pass
             else:
                 return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})
 
-        tasks = user.tasks.all()
+        tasks = ToDoTask.objects.filter(user=user)
         return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})
 
 
@@ -131,7 +132,7 @@ class CompleteTask(APIView):
     def post(self, request, id):
         user = request.user
 
-        task = user.tasks.get(id=id)
+        task = ToDoTask.objects.get(user=user, id=id)
         task.is_completed = True
         task.save(update_fields=['is_completed'])
 

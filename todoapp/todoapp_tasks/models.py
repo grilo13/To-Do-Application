@@ -1,11 +1,13 @@
 import datetime
 
 from django.db import models
+from todoapp.todoapp_users.models import User
 from django.utils.timezone import now
 
 
 # Create your models here.
 class ToDoTask(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=200)
     is_completed = models.BooleanField(default=False)
