@@ -28,17 +28,27 @@ class ListTasksView(GenericAPIView):
         context = {'tasks': tasks, 'count': tasks.count()}
         return render(request, 'task_list.html', context)
 
+
+class CreateTask(GenericAPIView):
+    serializer_class = TaskSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = ToDoTask.objects.all()
+
     def post(self, request):
+        user = request.user
         data = request.data
 
-        task = ToDoTask.objects.create(**data)
+        serializer = self.serializer_class(data=data)
 
-        user = User.objects.get(id=2)
-        user.tasks.add(task)
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            return Response(serializer.errors)
 
+        user.tasks.add(serializer.data.get('id'))
         user.save()
 
-        return Response(status=HTTP_200_OK)
+        return redirect('list_of_tasks')
 
 
 class GetTaskView(GenericAPIView):
@@ -86,7 +96,23 @@ class TaskReorderView(APIView):
 
         if option == 'completed':
             tasks = user.tasks.filter(is_completed=True).order_by('created_date')
-        else:
-            tasks = user.tasks.all()
+            if tasks.count() == 0:
+                pass
+            else:
+                return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})
 
+        tasks = user.tasks.all()
         return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})
+
+
+class CompleteTask(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, id):
+        user = request.user
+
+        task = user.tasks.get(id=id)
+        task.is_completed = True
+        task.save(update_fields=['is_completed'])
+
+        return redirect('list_of_tasks')
