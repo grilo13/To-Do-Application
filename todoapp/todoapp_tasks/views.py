@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from django.db.models.query import QuerySet
+
 # Response
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -96,6 +98,12 @@ class TaskReorderView(APIView):
 
         if option == 'completed':
             tasks = user.tasks.filter(is_completed=True).order_by('created_date')
+            if tasks.count() == 0:
+                pass
+            else:
+                return render(request, 'task_list.html', {'tasks': tasks, 'count': tasks.count})
+        elif option == 'priority':
+            tasks = user.tasks.order_by('priority')
             if tasks.count() == 0:
                 pass
             else:

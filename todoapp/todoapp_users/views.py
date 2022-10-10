@@ -56,7 +56,7 @@ class RegisterUser(GenericAPIView):
         login(request, user)  # Persist a user id and a backend in the request. This way a user doesn't
         # have to reauthenticate on every request.
 
-        return Response({'success': 'User was created successfully.'}, status=HTTP_200_OK)
+        return redirect('list_of_tasks')
 
 
 class LogoutUser(GenericAPIView):
@@ -65,7 +65,6 @@ class LogoutUser(GenericAPIView):
     def get(self, request):
         logout(request)
         return redirect('login_user')
-        # return Response(f'User logged out.', status=HTTP_200_OK)
 
 
 class LoginUser(GenericAPIView):
