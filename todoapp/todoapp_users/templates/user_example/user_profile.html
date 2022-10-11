@@ -34,12 +34,14 @@
         <button type="submit" class="update_description" value="description">Update</button>
     </form>
     {% if message %}
-        <h1 class="success_message">{{ message }}</h1>
+        <h1 class="success_message" style="font-size:20px ;color: darkolivegreen">{{ message }}</h1>
     {% elif error %}
-        <h1 class="error_message">{{ error }}</h1>
+        <h1 class="error_message" style="font-size: 20px; color: #65181f">{{ error }}</h1>
     {% else %}
         <br>
     {% endif %}
-</div>
+    <a href="{% url 'list_of_tasks' %}"
+                    class="turn-back-to-list-of-tasks"><button>Turn back</button>
+        </a></div>
 </body>
 </html>
