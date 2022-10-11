@@ -16,11 +16,12 @@
             <button type="submit" class="update_description" value="description">Update Description</button>
         </form>
         <{% if message %}
-            <h1 class="successful_description_update">Description updated successfully</h1>
+            <h1 class="successful-description-update" style="font-size: 15px;
+                        color: darkslategrey;">Description updated successfully</h1>
         {% else %}
+            <br>
+            <br>
         {% endif %}
-        <br>
-        <br>
         <a href="{% url 'delete_task_by_id' task.id %}"
            class="delete-task"><button>Delete task</button>
         </a>

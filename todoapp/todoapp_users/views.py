@@ -9,13 +9,13 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from .models import User
 
 # Serializers
-from .serializers import UserSerializer, RegisterUserSerializer, LoginUserSerializer
+from .serializers import UserSerializer, RegisterUserSerializer, LoginUserSerializer, UpdateUserSerializer
 
 # Register and Authentication methods
 from django.contrib.auth import password_validation, authenticate, login, logout
 
 # Permissions
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
 # Create your views here.
@@ -103,6 +103,31 @@ class LoginUser(GenericAPIView):
 
         return redirect('list_of_tasks')
         # return Response({'success': 'User logged in successfully.'}, status=HTTP_200_OK)
+
+
+class UpdateProfileView(GenericAPIView):
+    serializer_class = UpdateUserSerializer
+    permission_classes = (IsAuthenticated,)
+    queryset = User.objects.all()
+
+    def get(self, request):
+        return render(request, 'user_example/user_profile.html')
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        data = request.data
+        mutable_data = data.copy()
+        mutable_data.pop('csrfmiddlewaretoken')
+        updated_user = User.objects.filter(id=user.id)
+
+        serializer = self.serializer_class(data=mutable_data)
+        if serializer.is_valid():
+            updated_user.update(**serializer.data)
+        else:
+            return render(request, 'user_example/user_profile.html',
+                          context={'error': 'Something went wrong with the parameters.'})
+
+        return render(request, 'user_example/user_profile.html', context={'message': 'User updated successfully'})
 
 
 def index(request):

@@ -71,17 +71,15 @@ class UpdateTaskView(APIView):
         user = request.user
         data = request.data
         task_description = data.get('description')
-
+        task = ToDoTask.objects.get(user=user, id=id)
         try:
-            task = ToDoTask.objects.get(user=user, id=id)
             task.description = task_description
             task.save(update_fields=['description'])
         except Exception as e:
-            # return render(request, 'task_object.html', {'error': 'Something went wrong.'})
-            return redirect('list_of_tasks')
+            return render(request, 'task_object.html', {'error': 'Something went wrong.', 'task': task})
 
-        context = {'message': 'Description update successfully.'}
-        return redirect('list_of_tasks')
+        context = {'message': 'Description update successfully.', 'task': task}
+        return render(request, 'task_object.html', context)
 
 
 class DeleteTaskView(GenericAPIView):

@@ -41,3 +41,8 @@
     .task-description .delete-task {
         position: relative;
     }
+
+    .task-description h1.successful-description-update {
+        font-size: 10px;
+        color: darkslategrey;
+    }
