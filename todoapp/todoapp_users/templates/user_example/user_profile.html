@@ -8,7 +8,8 @@
 </head>
 <body>
 <div class="main">
-    <h1 class="profile_information">Profile Information</h1>
+    <h1 class="profile_information" style="color: #213c75;">Profile Information</h1>
+    <div class="form-data">
     <form id="updateProfile" method="post" action="{% url 'update_user' %}">
         {% csrf_token %}
         <label for="email">Email</label>
@@ -33,6 +34,9 @@
         {% endif %}
         <button type="submit" class="update_description" value="description">Update</button>
     </form>
+    <img class="user-profile-picture" src="{{ user.photo.url }}" alt="User Photo" style="border: 1px #ddd;
+          border-radius: 3px; padding-left: 1em">
+    </div>
     {% if message %}
         <h1 class="success_message" style="font-size:20px ;color: darkolivegreen">{{ message }}</h1>
     {% elif error %}
@@ -41,7 +45,7 @@
         <br>
     {% endif %}
     <a href="{% url 'list_of_tasks' %}"
-                    class="turn-back-to-list-of-tasks"><button>Turn back</button>
+                    class="turn-back-to-list-of-tasks"><img src="{% static 'images/aiga_left_arrow_bg.png' %}" alt="Turn back" style="width: 20px;">
         </a></div>
 </body>
 </html>

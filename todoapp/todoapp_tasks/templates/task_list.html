@@ -14,10 +14,21 @@
 <body>
 <div class="main">
     <div class="header-bar">
-        <h1>Welcome {{ request.user }}</h1>
-        <h3 style="margin:0">You have <i>{{ count }} tasks.</i></h3>
+        {% if request.user.first_name %}
+            <h1 style="color: #213c75">Welcome {{ user.first_name }}!</h1>
+        {% else %}
+             <h1>Welcome {{ request.user }}</h1>
+        {% endif %}
+        <h3 style="margin:0; font-size: 15px">You have <i>{{ count }} tasks.</i></h3>
     </div>
-    <label for="task-priority">Order by</label>
+    <div class="functionality_links">
+            <a href="{% url 'create_task' %}"
+                               class="create-task" style="padding-top: 5px;">Create task</a>
+            <a href="{% url 'update_user' %}"
+                                   class="update-profile">Profile Page</a>
+    </div>
+    <br>
+    <label for="task-priority">Order by</label><br>
     <select onclick="val()" id="task-priority">
         <option disabled="disabled" selected="selected">Select an option.</option>
         <option value="priority">Priority</option>
@@ -25,24 +36,19 @@
         <option value="created_date">Added date</option>
         <option value="updated_date">Update date</option>
     </select>
-
     <script>
         function val() {
             order_by = document.getElementById("task-priority").value;
             document.getElementById("option").setAttribute('value',order_by);
         }
     </script>
-
     <form id="reorderForm" method="post" action="{% url 'reorder_list_of_tasks' %}">
         {% csrf_token %}
-        <input type="hidden" id="option" name="option">
-        <input type="submit" value="Submit" onclick="val()">
+        <div class="side-by-side">
+            <input type="hidden" id="option" name="option">
+            <input type="submit" value="Order" style="margin-top:5px " onclick="val()">
+        </div>
     </form>
-
-    <a href="{% url 'create_task' %}"
-                           class="btn btn-danger btn-sm">Create task</a>
-    <a href="{% url 'update_user' %}"
-                           class="btn btn-danger btn-sm">Profile Page</a>
 
     <div class="app-table">
         <table class="styled-table">
@@ -83,8 +89,8 @@
     <br>
     <br>
     {% if request.user.is_authenticated %}
-        <a href="{% url 'logout_user' %}">
-            <button>Logout</button>
+        <a href="{% url 'logout_user' %}"
+                    class="logout-button"><img src="{% static 'images/logout.png' %}" alt="Logout" style="width: 20px;">
         </a>
     {% else %}
         <a href="{% url 'login_user' %}">Login</a>

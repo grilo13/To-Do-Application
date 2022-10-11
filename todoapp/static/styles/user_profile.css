@@ -6,12 +6,24 @@
 
     .main {
         background-color: #FFFFFF;
-        width: 400px;
-        height: 400px;
+        width: 35%;
+        height: 40%;
         margin: 10em auto;
         padding-top: 1em;
+        padding-bottom: 1em;
         border-radius: 1.5em;
         box-shadow: 5px 11px 35px 2px rgba(0, 0, 0, 0.14);
         text-align: center;
 
+    }
+
+    .form-data {
+        display: flex;
+        flex-direction: row;
+        padding-left: 1em;
+    }
+
+    .user-profile-picture {
+        padding-left: 1em;
+        width: 50%;
     }
