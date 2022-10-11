@@ -2,86 +2,100 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/list_tasks.css' %}"/>
   <style>
       .header-bar {
           text-align: center;
           margin: auto;
       }
   </style>
+  <title>List of Tasks</title>
 </head>
 <body>
-<div class="header-bar">
-    <div>
-        <h1>Hello {{ request.user }}</h1>
-        <h3 style="margin:0">You have <i>{{ count }} tasks.</i></h3>
+<div class="main">
+    <div class="header-bar">
+        {% if request.user.first_name %}
+            <h1 style="color: #213c75">Welcome {{ user.first_name }}!</h1>
+        {% else %}
+             <h1>Welcome {{ request.user }}</h1>
+        {% endif %}
+        <h3 style="margin:0; font-size: 15px">You have <i>{{ count }} tasks.</i></h3>
     </div>
-</div>
-<label for="task-priority">Order by</label>
-<select onclick="val()" id="task-priority">
-    <option disabled="disabled" selected="selected">Select an option.</option>
-    <option value="priority">Priority</option>
-    <option value="completed">Completed</option>
-</select>
+    <div class="functionality_links">
+            <a href="{% url 'create_task' %}"
+                               class="create-task" style="padding-top: 5px;">Create task</a>
+            <a href="{% url 'update_user' %}"
+                                   class="update-profile">Profile Page</a>
+    </div>
+    <br>
+    <label for="task-priority">Order by</label><br>
+    <select onclick="val()" id="task-priority">
+        <option disabled="disabled" selected="selected">Select an option.</option>
+        <option value="priority">Priority</option>
+        <option value="completed">Completed</option>
+        <option value="created_date">Added date</option>
+        <option value="updated_date">Update date</option>
+    </select>
+    <script>
+        function val() {
+            order_by = document.getElementById("task-priority").value;
+            document.getElementById("option").setAttribute('value',order_by);
+        }
+    </script>
+    <form id="reorderForm" method="post" action="{% url 'reorder_list_of_tasks' %}">
+        {% csrf_token %}
+        <div class="side-by-side">
+            <input type="hidden" id="option" name="option">
+            <input type="submit" value="Order" style="margin-top:5px " onclick="val()">
+        </div>
+    </form>
 
-<script>
-    function val() {
-        order_by = document.getElementById("task-priority").value;
-        document.getElementById("option").setAttribute('value',order_by);
-    }
-</script>
-
-<form id="reorderForm" method="post" action="{% url 'reorder_list_of_tasks' %}">
-    {% csrf_token %}
-    <input type="hidden" id="option" name="option">
-    <input type="submit" value="Submit" onclick="val()">
-</form>
-
-<a href="{% url 'create_task' %}"
-                       class="btn btn-danger btn-sm">Create task</a>
-
-
-<div class="app-table">
-    <table class="table table-stripped table-hover">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Priority</th>
-            <th>Completed</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {% for task in tasks %}
+    <div class="app-table">
+        <table class="styled-table">
+            <thead>
             <tr>
-                <td><a href="{% url 'get_task_by_id' task.id %}"
-                       class="btn btn-danger btn-sm">{{ task.id }}</a></td>
-                <td>{{ task.title }}</td>
-                <td>{{ task.description }}</td>
-                <td>{{ task.priority }}</td>
-                <td> {{ task.is_completed }}</td>
-                {% if task.is_completed %}
-                {% else %}
-                    <td>
-                        <form id="completeTask" method="post" action="{% url 'complete_task' task.id %}">
-                            {% csrf_token %}
-                            <input type="submit" value="Click to complete"  >
-                        </form>
-                     </td>
-                {% endif %}
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Priority</th>
+                <th>Completed</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td><a href="{% url 'get_task_by_id' task.id %}"
+                           class="btn btn-danger btn-sm">{{ task.id }}</a></td>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.description }}</td>
+                    {% if task.priority == 'Very High' %}
+                        <td style="color: darkred">{{ task.priority }}</td>
+                    {% elif task.priority == 'High' %}
+                        <td style="color: orangered">{{ task.priority }}</td>
+                    {% elif task.priority == 'Normal' %}
+                        <td style="color: darkblue">{{ task.priority }}</td>
+                    {% elif task.priority == 'Low' %}
+                        <td style="color: darkgreen">{{ task.priority }}</td>
+                    {% elif task.priority == 'Very Low' %}
+                        <td style="color: darkolivegreen">{{ task.priority }}</td>
+                    {% endif %}
+                    <td> {{ task.is_completed }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <br>
+    <br>
+    {% if request.user.is_authenticated %}
+        <a href="{% url 'logout_user' %}"
+                    class="logout-button"><img src="{% static 'images/logout.png' %}" alt="Logout" style="width: 20px;">
+        </a>
+    {% else %}
+        <a href="{% url 'login_user' %}">Login</a>
+    {% endif %}
 </div>
-{% if request.user.is_authenticated %}
-    <a href="{% url 'logout_user' %}">
-        <button>Logout</button>
-    </a>
-{% else %}
-    <a href="{% url 'login_user' %}">Login</a>
-{% endif %}
 </body>
 </html>
 

@@ -8,6 +8,12 @@ class UserSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username']
+
+
 class RegisterUserSerializer(serializers.Serializer):
     email = serializers.EmailField(help_text='Leave empty if no change needed', style={'placeholder': 'Email'})
     password = serializers.CharField(

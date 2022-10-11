@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from todoapp.todoapp_tasks.models import ToDoTask
 
 
 class UserManager(BaseUserManager):
@@ -45,7 +44,6 @@ class User(AbstractUser):
     email = models.EmailField('Email Address', unique=True)
     username = models.CharField('Username', max_length=100)
     photo = models.ImageField(upload_to='users_pictures', default='default_user_picture', blank=True)
-    tasks = models.ManyToManyField(ToDoTask)
 
     USERNAME_FIELD = 'email'  # primary key of user know is email
     REQUIRED_FIELDS = []

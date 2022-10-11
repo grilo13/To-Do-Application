@@ -1,22 +1,41 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/task.css' %}"/>
+    <title>Task {{ task.title }}</title>
+</head>
 <body>
-<div class="header-bar">
-    <div>
-        <h1>Hello {{ request.user }}</h1>
+<div class="main">
+    <div class="task-description">
+        <h2 class="task-title">{{ task.title }}</h2>
+        <h2 class="task-id">ID: {{ task.id }}</h2>
+        <form id="updateTask" method="post" action="{% url 'update_task' task.id %}">
+            {% csrf_token %}
+            <textarea class="description" style="resize: none" name="description">{{ task.description }}</textarea><br><br>
+            <button type="submit" class="update_description" value="description">Update Description</button>
+        </form>
+        {% if task.is_completed %}
+        {% else %}
+            <form id="completeTask" method="post" action="{% url 'complete_task' task.id %}">
+                {% csrf_token %}
+                <input type="image" src="/todoapp/todoapp_users/assets/check_mark.png" alt="Mark as Done"/>
+            </form>
+        {% endif %}
+        {% if message %}
+            <h1 class="successful-description-update" style="font-size: 15px;
+                        color: darkslategrey;">Description updated successfully</h1>
+        {% else %}
+            <br>
+        {% endif %}
+        <a href="{% url 'delete_task_by_id' task.id %}"
+           class="delete-task"><button>Delete task</button>
+        </a>
+        <p></p>
+        <a href="{% url 'list_of_tasks' %}"
+                    class="turn-back-to-list-of-tasks"><img src="{% static 'images/aiga_left_arrow_bg.png' %}" alt="Turn back" style="width: 20px;">
+        </a>
     </div>
-</div>
-
-<div class="app-table">
-    <h2>Task {{ task.id }}</h2>
-    <h2>{{ task.description }}</h2>
-    <a href="{% url 'delete_task_by_id' task.id %}"
-       class="btn btn-danger btn-sm"><button>Delete task</button>
-    </a>
-    <p></p>
-    <a href="{% url 'list_of_tasks' %}">
-        <button>Return to list of tasks</button>
-    </a>
 </div>
 </body>
 </html>

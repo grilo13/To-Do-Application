@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/create_task.css' %}"/>
+    <title>Add Task</title>
+</head>
+<body>
+<div class="main">
+    <div class="create-task-div">
+        <h1 class="create-task-title">Add a new task to the list</h1>
+        <form id="createTask" method="post" action="{% url 'create_task' %}">
+                {% csrf_token %}
+                <label for="title">Title</label>
+                <br>
+                <input type="text" id="title" name="title" placeholder="Task title" required><br><br>
+                <label for="description">Description</label>
+                <br>
+                <textarea name="description" placeholder="Enter description here..." style="resize: none"></textarea><br><br>
+                <label for="priority">Priority</label>
+                <br>
+                <select name="priority" id="priority">
+                  <option value="Very High">Very High</option>
+                  <option value="High">High</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Very Low">Very Low</option>
+                  <option value="Low">Low</option>
+                </select>
+                <br>
+                <br>
+                <button type="submit" class="login_submit" value="Submit">Add Task</button>
+                <br>
+                <br>
+        </form>
+        <a href="{% url 'list_of_tasks' %}"
+                    class="turn-back-to-list-of-tasks"><img src="{% static 'images/aiga_left_arrow_bg.png' %}" alt="Turn back" style="width: 20px;">
+        </a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/user_profile.css' %}"/>
+    <title>Your profile!</title>
+</head>
+<body>
+<div class="main">
+    <h1 class="profile_information" style="color: #213c75;">Profile Information</h1>
+    <div class="form-data">
+    <form id="updateProfile" method="post" action="{% url 'update_user' %}">
+        {% csrf_token %}
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="{{ user.email }}"><br><br>
+        <label for="first_name">First Name</label>
+        {% if user.first_name %}
+            <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}"><br><br>
+        {% else %}
+            <input type="text" id="first_name" name="first_name" placeholder="Introduce your first name"><br><br>
+        {% endif %}
+        <label for="last_name">Last Name</label>
+        {% if user.last_name %}
+            <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}"><br><br>
+        {% else %}
+            <input type="text" id="last_name" name="last_name" placeholder="Introduce your last name"><br><br>
+        {% endif %}
+        <label for="username">Username</label>
+        {% if user.username %}
+            <input type="text" id="username" name="username" value="{{ user.username }}"><br><br>
+        {% else %}
+            <input type="text" id="username" name="username" placeholder="Introduce your username"><br><br>
+        {% endif %}
+        <button type="submit" class="update_description" value="description">Update</button>
+    </form>
+    <img class="user-profile-picture" src="{{ user.photo.url }}" alt="User Photo" style="border: 1px #ddd;
+          border-radius: 3px; padding-left: 1em">
+    </div>
+    {% if message %}
+        <h1 class="success_message" style="font-size:20px ;color: darkolivegreen">{{ message }}</h1>
+    {% elif error %}
+        <h1 class="error_message" style="font-size: 20px; color: #65181f">{{ error }}</h1>
+    {% else %}
+        <br>
+    {% endif %}
+    <a href="{% url 'list_of_tasks' %}"
+                    class="turn-back-to-list-of-tasks"><img src="{% static 'images/aiga_left_arrow_bg.png' %}" alt="Turn back" style="width: 20px;">
+        </a></div>
+</body>
+</html>
