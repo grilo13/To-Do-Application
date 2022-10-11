@@ -63,7 +63,17 @@
                            class="btn btn-danger btn-sm">{{ task.id }}</a></td>
                     <td>{{ task.title }}</td>
                     <td>{{ task.description }}</td>
-                    <td>{{ task.priority }}</td>
+                    {% if task.priority == 'Very High' %}
+                        <td style="color: darkred">{{ task.priority }}</td>
+                    {% elif task.priority == 'High' %}
+                        <td style="color: orangered">{{ task.priority }}</td>
+                    {% elif task.priority == 'Normal' %}
+                        <td style="color: darkblue">{{ task.priority }}</td>
+                    {% elif task.priority == 'Low' %}
+                        <td style="color: darkgreen">{{ task.priority }}</td>
+                    {% elif task.priority == 'Very Low' %}
+                        <td style="color: darkolivegreen">{{ task.priority }}</td>
+                    {% endif %}
                     <td> {{ task.is_completed }}</td>
                 </tr>
             {% endfor %}
