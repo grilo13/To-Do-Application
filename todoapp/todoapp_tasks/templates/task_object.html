@@ -15,7 +15,14 @@
             <textarea class="description" style="resize: none" name="description">{{ task.description }}</textarea><br><br>
             <button type="submit" class="update_description" value="description">Update Description</button>
         </form>
-        <{% if message %}
+        {% if task.is_completed %}
+        {% else %}
+            <form id="completeTask" method="post" action="{% url 'complete_task' task.id %}">
+                {% csrf_token %}
+                <input type="image" src="/todoapp/todoapp_users/assets/check_mark.png" alt="Mark as Done"/>
+            </form>
+        {% endif %}
+        {% if message %}
             <h1 class="successful-description-update" style="font-size: 15px;
                         color: darkslategrey;">Description updated successfully</h1>
         {% else %}

@@ -45,7 +45,7 @@
                            class="btn btn-danger btn-sm">Profile Page</a>
 
     <div class="app-table">
-        <table class="table table-stripped table-hover">
+        <table class="styled-table">
             <thead>
             <tr>
                 <th>ID</th>
@@ -65,15 +65,6 @@
                     <td>{{ task.description }}</td>
                     <td>{{ task.priority }}</td>
                     <td> {{ task.is_completed }}</td>
-                    {% if task.is_completed %}
-                    {% else %}
-                        <td>
-                            <form id="completeTask" method="post" action="{% url 'complete_task' task.id %}">
-                                {% csrf_token %}
-                                <input type="image" src="/todoapp/todoapp_users/assets/check_mark.png" alt="Mark as Done"/>
-                            </form>
-                         </td>
-                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>
