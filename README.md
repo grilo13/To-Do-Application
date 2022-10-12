@@ -1,2 +1,2 @@
 # To Do Application
-To Do Application created using Django and React
+To Do Application created using Django and HTML/CSS
