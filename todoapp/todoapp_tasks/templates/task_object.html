@@ -19,7 +19,8 @@
         {% else %}
             <form id="completeTask" method="post" action="{% url 'complete_task' task.id %}">
                 {% csrf_token %}
-                <input type="image" src="/todoapp/todoapp_users/assets/check_mark.png" alt="Mark as Done"/>
+                Mark as Done: <button type="submit" class="login_submit" value="Mark as Done" style="background: none; margin-top: 10px;"><img src="{% static '/images/check_mark.png' %}" alt="Mark as done"
+                                                                                     style="width: 15px;"></button>
             </form>
         {% endif %}
         {% if message %}

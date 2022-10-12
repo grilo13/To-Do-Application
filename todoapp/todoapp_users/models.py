@@ -29,7 +29,6 @@ class UserManager(BaseUserManager):
         """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        # extra_fields.setdefault('role', 'Admin')
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
@@ -42,8 +41,8 @@ class UserManager(BaseUserManager):
 # Create your models here.
 class User(AbstractUser):
     email = models.EmailField('Email Address', unique=True)
-    username = models.CharField('Username', max_length=100)
-    photo = models.ImageField(upload_to='users_pictures', default='default_user_picture', blank=True)
+    username = models.CharField('Username', max_length=100, blank=True)
+    photo = models.ImageField(upload_to='users_pictures', default='users_pictures/default_picture.jpg', blank=True)
 
     USERNAME_FIELD = 'email'  # primary key of user know is email
     REQUIRED_FIELDS = []

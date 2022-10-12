@@ -10,7 +10,7 @@
 <div class="main">
     <h1 class="profile_information" style="color: #213c75;">Profile Information</h1>
     <div class="form-data">
-    <form id="updateProfile" method="post" action="{% url 'update_user' %}">
+    <form id="updateProfile" enctype="multipart/form-data" method="post" action="{% url 'update_user' %}">
         {% csrf_token %}
         <label for="email">Email</label>
         <input type="email" id="email" name="email" value="{{ user.email }}"><br><br>
@@ -32,13 +32,18 @@
         {% else %}
             <input type="text" id="username" name="username" placeholder="Introduce your username"><br><br>
         {% endif %}
+        <input type="file" id="photo" name="photo" value="Update Photo"><br><br>
         <button type="submit" class="update_description" value="description">Update</button>
     </form>
     <img class="user-profile-picture" src="{{ user.photo.url }}" alt="User Photo" style="border: 1px #ddd;
-          border-radius: 3px; padding-left: 1em">
+          border-radius: 3px; padding-left: 3em; max-width: 200px">
     </div>
     {% if message %}
-        <h1 class="success_message" style="font-size:20px ;color: darkolivegreen">{{ message }}</h1>
+        {%  if photo_update  %}
+            <h1 class="success_message" style="font-size:20px ;color: darkolivegreen">User information and picture updated successfully.</h1>
+        {% else %}
+            <h1 class="success_message" style="font-size:20px ;color: darkolivegreen">{{ message }}</h1>
+        {% endif %}
     {% elif error %}
         <h1 class="error_message" style="font-size: 20px; color: #65181f">{{ error }}</h1>
     {% else %}

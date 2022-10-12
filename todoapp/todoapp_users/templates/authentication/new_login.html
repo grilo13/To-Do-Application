@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'styles/login_style.css' %}"/>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-   <!-- <link rel="stylesheet" href="/todoapp/todoapp_users/fonts/fontawesome-free-6.2.0-web"> -->
+    <!-- <link rel="stylesheet" href="/todoapp/todoapp_users/fonts/fontawesome-free-6.2.0-web"> -->
     <title>Sign in</title>
 </head>
 
@@ -21,8 +21,11 @@
         <input type="password" class="pass" name="password" placeholder="Password" required><br><br>
         <button type="submit" class="login_submit" value="Submit">Login</button>
     </form>
+    {% if logout %}
+        <h1 class="logout-message" style="color: #213c75">{{ logout }}</h1>
+    {% endif %}
     {% if error %}
-            <h2 class="login_error">{{ error }}</h2>
+        <h2 class="login_error">{{ error }}</h2>
     {% endif %}
     <p class="forgot" align="center"><a href="#">Forgot Password?</p>
 </div>
