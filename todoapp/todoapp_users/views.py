@@ -64,7 +64,8 @@ class LogoutUser(GenericAPIView):
 
     def get(self, request):
         logout(request)
-        return redirect('login_user')
+        # return redirect('login_user')
+        return render(request, 'authentication/new_login.html', context={'logout': 'Just logged out successfully.'})
 
 
 class LoginUser(GenericAPIView):
@@ -132,7 +133,6 @@ class UpdateProfileView(GenericAPIView):
         if serializer.is_valid():
             updated_user.update(**serializer.data)
         else:
-            print(serializer.errors)
             return render(request, 'user_example/user_profile.html',
                           context={'error': 'Something went wrong with the parameters.'}, status=HTTP_400_BAD_REQUEST)
 

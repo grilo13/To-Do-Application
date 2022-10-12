@@ -10,7 +10,6 @@ class TaskSerializer(serializers.ModelSerializer):
                   'priority']
 
     def create(self, validated_data):
-        print('validated data {0}'.format(validated_data))
         task = ToDoTask(
             **validated_data
         )

@@ -1,90 +1,93 @@
-    body {
-        background-color: #aabfe7;
-        font-family: 'Ubuntu', sans-serif;
-    }
+body {
+    background-color: #aabfe7;
+    font-family: 'Ubuntu', sans-serif;
+}
 
 
-    .main {
-        background-color: #FFFFFF;
-        width: 50%;
-        height: 100%;
-        margin: 10em auto;
-        padding-top: 1em;
-        padding-bottom: 1em ;
-        border-radius: 1.5em;
-        box-shadow: 5px 11px 35px 2px rgba(0, 0, 0, 0.14);
-        text-align: center;
-    }
+.main {
+    background-color: #FFFFFF;
+    width: 50%;
+    height: 100%;
+    margin: 10em auto;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border-radius: 1.5em;
+    box-shadow: 5px 11px 35px 2px rgba(0, 0, 0, 0.14);
+    text-align: center;
+}
 
-    .header-bar {
-        text-align: center;
-        font-size: 10px;
-    }
+.header-bar {
+    text-align: center;
+    font-size: 10px;
+}
 
-    .app-table .styled-table {
-        border-collapse: collapse;
-        margin: 10px 10px;
-        font-size: 0.9em;
-        font-family: sans-serif;
-        min-width: 70%;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-    }
+.app-table .styled-table {
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    margin-top: 20px;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 70%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
 
-    .app-table .styled-table thead tr {
-        background-color: #353b9d;
-        color: #ffffff;
-        text-align: center;
-    }
+.app-table .styled-table thead tr {
+    background-color: #353b9d;
+    color: #ffffff;
+    text-align: center;
+}
 
-    .app-table .styled-table th,
-    .app-table .styled-table td {
-        padding: 12px 15px;
-    }
+.app-table .styled-table th,
+.app-table .styled-table td {
+    padding: 12px 15px;
+}
 
-    .styled-table tbody tr {
+.styled-table tbody tr {
     border-bottom: 1px solid #dddddd;
 }
 
-    .styled-table tbody tr:nth-of-type(even) {
-        background-color: #f2f9fa;
-    }
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f2f9fa;
+}
 
-    .styled-table tbody tr:last-of-type {
-        border-bottom: 1px solid #5292c4;
-    }
+.styled-table tbody tr:last-of-type {
+    border-bottom: 1px solid #5292c4;
+}
 
-    .styled-table tbody tr.active-row {
-        font-weight: bold;
-        color: #8ec7bc;
-    }
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #8ec7bc;
+}
 
-    .create-task {
-        text-decoration: none;
-        color: #213c75;
-    }
+.create-task {
+    text-decoration: none;
+    color: #213c75;
+}
 
-    a.create-task:hover {
-        background-color: #8ec7bc;
-    }
+a.create-task:hover {
+    background-color: #8ec7bc;
+}
 
-    a.create-task:active {
-        text-decoration: underline;
-    }
+a.create-task:active {
+    text-decoration: underline;
+}
 
-    .update-profile  {
-        text-decoration: none;
-        color: #213c75;
-    }
+.update-profile {
+    text-decoration: none;
+    color: #213c75;
+}
 
-    a.update-profile:active {
-        text-decoration: underline;
-    }
+a.update-profile:active {
+    text-decoration: underline;
+}
 
-    a.update-profile:hover {
-        background-color: #8ec7bc;
-    }
+a.update-profile:hover {
+    background-color: #8ec7bc;
+}
 
-    .functionality_links {
-        display: flex;
-        flex-direction: column;
-    }
+.functionality_links {
+    display: flex;
+    flex-direction: column;
+}
