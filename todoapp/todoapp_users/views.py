@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from rest_framework.generics import GenericAPIView
-
+from rest_framework.views import APIView
 # Responses
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -117,17 +117,42 @@ class UpdateProfileView(GenericAPIView):
         user = request.user
         data = request.data
         mutable_data = data.copy()
+        photo = request.FILES.get('photo', False)
         mutable_data.pop('csrfmiddlewaretoken')
-        updated_user = User.objects.filter(id=user.id)
+        mutable_data.pop('photo')
+        context = {}
 
+        if photo is not False:
+            user.photo = photo
+            user.save()
+            context['photo_update'] = 'Profile picture updated successfully.'
+
+        updated_user = User.objects.filter(id=user.id)
         serializer = self.serializer_class(data=mutable_data)
         if serializer.is_valid():
             updated_user.update(**serializer.data)
         else:
+            print(serializer.errors)
             return render(request, 'user_example/user_profile.html',
-                          context={'error': 'Something went wrong with the parameters.'})
+                          context={'error': 'Something went wrong with the parameters.'}, status=HTTP_400_BAD_REQUEST)
 
-        return render(request, 'user_example/user_profile.html', context={'message': 'User updated successfully'})
+        context['message'] = 'User updated successfully'
+        context['user'] = updated_user[0]
+        return render(request, 'user_example/user_profile.html',
+                      context=context)
+
+
+class UpdatePhotoView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        photo = request.data.get('photo')
+
+        user.photo = photo
+        user.save()
+
+        return redirect('update_user')
 
 
 def index(request):
